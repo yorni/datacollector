@@ -1,0 +1,11 @@
+db = db.getSiblingDB("DBNAME");
+db.createUser({
+  user: "DBUSER",
+  pwd: "DBPASSWORD",
+  roles: [
+    {
+      role: "dbAdmin",
+      db: "DBNAME",
+    },
+  ],
+});
