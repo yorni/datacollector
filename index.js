@@ -60,8 +60,8 @@ async function processTradesData(trade) {
   });
 
   try {
+    console.log("Adding trade!");
     const newTradeObject = await tradeObject.save();
-    console.log("Trade added!");
   } catch (err) {
     console.log("!!!!!!!!!!!!!!", err.message);
   }
