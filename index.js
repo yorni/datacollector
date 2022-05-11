@@ -6,7 +6,6 @@ require("dotenv").config();
 //mongoose
 const mongoose = require("mongoose");
 
-let dataSource = process.env["DATA_SOURCE"];
 mongoose.connect(process.env["DATABASE_URL"], { useNewUrlParser: true });
 
 const db = mongoose.connection;
@@ -17,8 +16,8 @@ db.once("open", () => console.log("connection to db established"));
 function initParameters() {
   var myArgs = process.argv.slice(2);
 
-  if (dataSource) {
-    param.collectedData = "trades";
+  if (process.env["DATA_SOURCE"]) {
+    param.collectedData = process.env["DATA_SOURCE"];
   }
   if (myArgs[0] && myArgs[0] == "depth") {
     param.collectedData = "depth";
