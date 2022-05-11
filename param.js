@@ -3,7 +3,7 @@ param = {
   collectedData: "trades",
   marketType: "FUTURES",
   fullDepth: {},
-  depthSnapshot: {},
+  depthSnapshot: undefined,
   depthSnapshotSended: false,
   updateDepth: [],
   depthUpdated: false,

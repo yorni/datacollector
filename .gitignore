@@ -10,3 +10,4 @@ node_modules/
 *.csv
 workspace.code-workspace
 mongodb-docker/mongo-init.js
+mongodb-docker/*.env
