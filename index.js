@@ -102,10 +102,40 @@ async function processDepthData(depth) {
     time: param.fullDepth.eventTime,
     firstId: param.fullDepth.firstId,
     finalId: param.fullDepth.finalId,
-    bids: Object.assign({}, param.fullDepth.bids),
-    asks: Object.assign({}, param.fullDepth.asks),
+    bids: {},
+    asks: {},
   });
+
   if (depthObject.ticker) {
+    let minBid = Number(Object.keys(param.fullDepth.bids)[0]) / 1.05;
+    let maxAsk = Number(Object.keys(param.fullDepth.asks)[0]) * 1.05;
+
+    var BreakException = {};
+
+    try {
+      Object.keys(param.fullDepth.bids).forEach((bid) => {
+        if (Number(bid) >= minBid) {
+          depthObject.bids[bid] = param.fullDepth.bids[bid];
+        } else {
+          throw BreakException;
+        }
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
+
+    try {
+      Object.keys(param.fullDepth.asks).forEach((ask) => {
+        if (Number(ask) <= maxAsk) {
+          depthObject.asks[ask] = param.fullDepth.asks[ask];
+        } else {
+          throw BreakException;
+        }
+      });
+    } catch (e) {
+      if (e !== BreakException) throw e;
+    }
+
     try {
       //console.log("Adding depth!");
       //console.log(depthObject);
