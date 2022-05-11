@@ -5,7 +5,6 @@ const depthM = require("./models/depth");
 require("dotenv").config();
 //mongoose
 const mongoose = require("mongoose");
-console.log(process.env["DATABASE_URL"]);
 
 let dataSource = process.env["DATA_SOURCE"];
 mongoose.connect(process.env["DATABASE_URL"], { useNewUrlParser: true });
@@ -98,7 +97,24 @@ async function processDepthData(depth) {
   } else {
     appyUpdate(depth, param.fullDepth);
   }
-  console.log(param.fullDepth);
+
+  depthObject = new depthM({
+    ticker: param.fullDepth.symbol,
+    time: param.fullDepth.eventTime,
+    firstId: param.fullDepth.firstId,
+    finalId: param.fullDepth.finalId,
+    bids: Object.assign({}, param.fullDepth.bids),
+    asks: Object.assign({}, param.fullDepth.asks),
+  });
+  if (depthObject.ticker) {
+    try {
+      //console.log("Adding depth!");
+      //console.log(depthObject);
+      const newdepthObject = await depthObject.save();
+    } catch (err) {
+      console.log("!!!!!!!!!!!!!!", err.message);
+    }
+  }
 }
 
 function appyUpdate(updateDepthL, depthToUpdate) {
