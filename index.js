@@ -23,6 +23,10 @@ function initParameters() {
     param.collectedData = "depth";
   }
 
+  if (process.env["TICKER"]) {
+    param.symbol = process.env["TICKER"];
+  }
+
   if (myArgs[1]) {
     param.symbol = myArgs[1];
   }
