@@ -49,13 +49,17 @@ function start() {
   } else {
     subscribeArray.push(param.symbol.toLowerCase() + "@depth@100ms");
   }
-  param.binance.futuresSubscribe(subscribeArray, (data) => {
-    if (data.e == "depthUpdate") {
-      processDepthData(data);
-    } else if (data.e == "trade") {
-      processTradesData(data);
-    }
-  });
+  param.binance.futuresSubscribe(
+    subscribeArray,
+    (data) => {
+      if (data.e == "depthUpdate") {
+        processDepthData(data);
+      } else if (data.e == "trade") {
+        processTradesData(data);
+      }
+    },
+    { reconnect: true }
+  );
 }
 
 async function processDepthData(depth) {
