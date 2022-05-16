@@ -115,8 +115,8 @@ async function processDepthData(depth) {
   });
 
   if (depthObject.ticker) {
-    let minBid = Number(Object.keys(param.fullDepth.bids)[0]) / 1.05;
-    let maxAsk = Number(Object.keys(param.fullDepth.asks)[0]) * 1.05;
+    let minBid = Number(Object.keys(param.fullDepth.bids)[0]) / 1.03;
+    let maxAsk = Number(Object.keys(param.fullDepth.asks)[0]) * 1.03;
 
     var BreakException = {};
 
