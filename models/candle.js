@@ -27,6 +27,14 @@ const candleSchema = new Schema({
     type: Number,
     required: true,
   },
+  lastBid: {
+    type: Number,
+    required: true,
+  },
+  lastAsk: {
+    type: Number,
+    required: true,
+  },
 
   v: {
     type: Number,

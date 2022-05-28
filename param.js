@@ -16,6 +16,8 @@ param = {
     h: 0,
     l: 0,
     c: 0,
+    lastBid: 0,
+    lastAsk: 0,
     v: 0,
     mv: 0,
     q: 0,
