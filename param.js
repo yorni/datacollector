@@ -11,6 +11,8 @@ param = {
   binance: {},
   minDepthValue: 1,
   candle: {},
+  lastBid: 0,
+  lastAsk: 0,
   newCandle: {
     o: 0,
     h: 0,

@@ -85,6 +85,8 @@ function startSubscription() {
 function newCandle(depth) {
   param.candle = Object.assign({}, param.newCandle);
   param.candle.time = depth.E;
+  param.candle.lastBid = param.lastBid;
+  param.candle.lastAsk = param.lastAsk;
   param.candle.ticker = depth.s;
 }
 async function saveCandle(candle) {
@@ -281,8 +283,10 @@ async function processTradesData(trade) {
     param.candle.mv += Number(volume);
     param.candle.mq++;
     param.candle.lastBid = Number(price);
+    param.lastBid = Number(price);
   } else {
     param.candle.lastAsk = Number(price);
+    param.lastAsk = Number(price);
   }
 
   if (param.candle.h < Number(price)) {
