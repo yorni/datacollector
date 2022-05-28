@@ -2,6 +2,7 @@ let { param } = require("./param");
 const Binance = require("node-binance-api");
 const tradeM = require("./models/trade");
 const depthM = require("./models/depth");
+const candleM = require("./models/candle");
 require("dotenv").config();
 //mongoose
 const mongoose = require("mongoose");
@@ -36,33 +37,109 @@ function initParameters() {
   param.binance = new Binance().options({
     APIKEY: process.env["APIKEY"],
     APISECRET: process.env["APISECRET"],
-    reconnect: true,
     verbose: true,
+    reconnect: false,
   });
 }
 
 function start() {
   initParameters();
-  let subscribeArray = [];
-  if (param.collectedData == "trades") {
-    subscribeArray.push(param.symbol.toLowerCase() + "@trade");
-  } else {
-    subscribeArray.push(param.symbol.toLowerCase() + "@depth@100ms");
+  startSubscription();
+  setInterval(checkBinanceWebSocketsState, 5000);
+}
+function checkBinanceWebSocketsState() {
+  let endpoints = param.binance.futuresSubscriptions();
+  //console.log(endpoints);
+  let endpointsCount = 0;
+  for (let endpoint in endpoints) {
+    endpointsCount++;
   }
-  param.binance.futuresSubscribe(
-    subscribeArray,
-    (data) => {
-      if (data.e == "depthUpdate") {
-        processDepthData(data);
-      } else if (data.e == "trade") {
-        processTradesData(data);
-      }
-    },
-    { reconnect: true }
-  );
+  if (!endpointsCount) {
+    param.fullDepth = {};
+    param.depthSnapshot = undefined;
+    param.depthSnapshotSended = false;
+    param.updateDepth = [];
+    param.depthUpdated = false;
+    startSubscription();
+  }
+}
+function startSubscription() {
+  let subscribeArray = [];
+  //if (param.collectedData == "trades") {
+  subscribeArray.push(param.symbol.toLowerCase() + "@aggTrade");
+  // } else {
+  subscribeArray.push(param.symbol.toLowerCase() + "@depth@100ms");
+  //}
+  param.binance.futuresSubscribe(subscribeArray, (data) => {
+    if (data.e == "depthUpdate") {
+      processDepthData(data);
+    } else if (data.e == "aggTrade") {
+      processTradesData(data);
+    }
+  });
+}
+
+function newCandle(depth) {
+  param.candle = Object.assign({}, param.newCandle);
+  param.candle.time = depth.E;
+  param.candle.ticker = depth.s;
+}
+async function saveCandle(candle) {
+  candleObject = new candleM();
+  candleObject.time = candle.time;
+  candleObject.ticker = candle.ticker;
+  candleObject.o = candle.o;
+  candleObject.h = candle.h;
+  candleObject.l = candle.l;
+  candleObject.c = candle.c;
+  candleObject.v = candle.v;
+  candleObject.mv = candle.mv;
+  candleObject.q = candle.q;
+  candleObject.mq = candle.mq;
+  candleObject.bids = Object.assign({}, candle.bids);
+  candleObject.asks = Object.assign({}, candle.asks);
+
+  removeSmallLevels(candleObject);
+  try {
+    const newcandleObject = await candleObject.save();
+    //console.log("candle saved");
+  } catch (err) {
+    console.log("!!!!!!!!!!!!!!", err.message);
+  }
+}
+
+function removeSmallLevels(candleObject) {
+  Object.keys(candleObject.bids).forEach((bid) => {
+    if (candleObject.bids[bid] < param.minDepthValue) {
+      delete candleObject.bids[bid];
+    }
+  });
+  Object.keys(candleObject.asks).forEach((ask) => {
+    if (candleObject.asks[ask] < param.minDepthValue) {
+      delete candleObject.asks[ask];
+    }
+  });
 }
 
 async function processDepthData(depth) {
+  if (!param.candle.ticker) {
+    newCandle(depth);
+  }
+
+  param.candle.numOfDepth++;
+  if (
+    Math.round((depth.E - 499) / 1000) >
+      Math.round((param.candle.time - 499) / 1000) &&
+    param.candle.numOfDepth >= 10
+  ) {
+    param.candle.bids = Object.assign({}, param.fullDepth.bids);
+    param.candle.asks = Object.assign({}, param.fullDepth.asks);
+    let candleToSave = Object.assign({}, param.candle);
+    newCandle(depth);
+    saveCandle(candleToSave);
+    param.candle.time = depth.E;
+  }
+
   if (!param.depthSnapshotSended) {
     param.depthSnapshotSended = true;
     param.depthSnapshot = await param.binance.futuresDepth(param.symbol, {
@@ -216,20 +293,44 @@ function appyUpdate(updateDepthL, depthToUpdate) {
 }
 
 async function processTradesData(trade) {
-  tradeObject = new tradeM({
-    time: trade.E,
-    creationTime: trade.T,
-    ticker: trade.s,
-    price: Number(trade.p),
-    buyerMaker: trade.m,
-    volume: Number(trade.q),
-  });
+  /*
+  {
+    e: 'aggTrade',
+    E: 1653722773087,
+    a: 259642818,
+    s: 'SOLUSDT',
+    p: '41.8200',
+    q: '89',
+    f: 448810400,
+    l: 448810405,
+    T: 1653722772930,
+    m: true
+  }
+  */
+  if (!param.candle.ticker) {
+    console.log("no candle");
+    return;
+  }
+  let { m: maker, E: time, s: ticker, p: price, q: volume } = trade;
+  if (param.candle.o == 0) {
+    param.candle.o = Number(price);
+    param.candle.h = Number(price);
+    param.candle.l = Number(price);
+  }
+  param.candle.c = Number(price);
+  param.candle.v += Number(volume);
+  param.candle.q++;
+  if (maker) {
+    param.candle.mv += Number(volume);
+    param.candle.mq++;
+  }
 
-  try {
-    //console.log("Adding trade!");
-    const newTradeObject = await tradeObject.save();
-  } catch (err) {
-    console.log("!!!!!!!!!!!!!!!!!", err.message);
+  if (param.candle.h < Number(price)) {
+    param.candle.h = Number(price);
+  }
+
+  if (param.candle.l > Number(price)) {
+    param.candle.l = Number(price);
   }
 }
 
