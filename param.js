@@ -9,7 +9,7 @@ param = {
   depthUpdated: false,
   logData: false,
   binance: {},
-  minDepthValue: 50000,
+  minDepthValue: 1,
   candle: {},
   newCandle: {
     o: 0,

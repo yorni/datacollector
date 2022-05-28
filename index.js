@@ -23,6 +23,9 @@ function initParameters() {
   if (myArgs[0] && myArgs[0] == "depth") {
     param.collectedData = "depth";
   }
+  if (process.env["MINDEPTH"]) {
+    param.minDepthValue = process.env["MINDEPTH"];
+  }
 
   if (process.env["TICKER"]) {
     param.symbol = process.env["TICKER"];
