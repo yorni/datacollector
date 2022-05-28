@@ -85,8 +85,6 @@ function startSubscription() {
 function newCandle(depth) {
   param.candle = Object.assign({}, param.newCandle);
   param.candle.time = depth.E;
-  param.candle.lastBid = param.lastBid;
-  param.candle.lastAsk = param.lastAsk;
   param.candle.ticker = depth.s;
 }
 async function saveCandle(candle) {
@@ -97,8 +95,8 @@ async function saveCandle(candle) {
   candleObject.h = candle.h;
   candleObject.l = candle.l;
   candleObject.c = candle.c;
-  candleObject.lastAsk = candle.lastAsk;
-  candleObject.lastBid = candle.lastBid;
+  candleObject.lastAsk = Number(Object.keys(lparam.fullDepth.asks)[0]);
+  candleObject.lastBid = Number(Object.keys(lparam.fullDepth.bids)[0]);
   candleObject.v = candle.v;
   candleObject.mv = candle.mv;
   candleObject.q = candle.q;
@@ -282,11 +280,6 @@ async function processTradesData(trade) {
   if (maker) {
     param.candle.mv += Number(volume);
     param.candle.mq++;
-    param.candle.lastBid = Number(price);
-    param.lastBid = Number(price);
-  } else {
-    param.candle.lastAsk = Number(price);
-    param.lastAsk = Number(price);
   }
 
   if (param.candle.h < Number(price)) {
