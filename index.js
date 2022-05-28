@@ -95,8 +95,8 @@ async function saveCandle(candle) {
   candleObject.h = candle.h;
   candleObject.l = candle.l;
   candleObject.c = candle.c;
-  candleObject.lastAsk = Number(Object.keys(lparam.fullDepth.asks)[0]);
-  candleObject.lastBid = Number(Object.keys(lparam.fullDepth.bids)[0]);
+  candleObject.lastAsk = Number(Object.keys(param.fullDepth.asks)[0]);
+  candleObject.lastBid = Number(Object.keys(param.fullDepth.bids)[0]);
   candleObject.v = candle.v;
   candleObject.mv = candle.mv;
   candleObject.q = candle.q;
