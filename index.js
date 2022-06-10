@@ -160,11 +160,12 @@ function removeSmallLevels(candleObject) {
       asks[String(numAsk)] = candleObject.asks[ask];
     }
   });
+
   candleObject.asks = Object.assign(
     {},
     Object.keys(asks)
       .sort(function (a, b) {
-        if (+a <= +b) {
+        if (Number(a) <= Number(b)) {
           return -1;
         } else {
           return 1;
@@ -175,7 +176,6 @@ function removeSmallLevels(candleObject) {
         return obj;
       }, {})
   );
-  console.log(candleObject.asks);
 }
 
 async function processDepthData(depth) {
