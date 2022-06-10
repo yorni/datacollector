@@ -131,11 +131,16 @@ function removeSmallLevels(candleObject) {
     } else {
       bids[String(numBid)] = candleObject.bids[bid];
     }
-    // if (candleObject.bids[bid] < param.minDepthValue) {
-    //   delete candleObject.bids[bid];
-    // }
   });
-  candleObject.bids = Object.assign({}, bids);
+
+  param.fullDepth.bids = Object.keys(bids).sort(function (a, b) {
+    if (+a <= +b) {
+      return 1;
+    } else {
+      return -1;
+    }
+  });
+
   Object.keys(candleObject.asks).forEach((ask) => {
     numAsk = Number(ask);
     numAsk =
@@ -146,11 +151,14 @@ function removeSmallLevels(candleObject) {
     } else {
       asks[String(numAsk)] = candleObject.asks[ask];
     }
-    // if (candleObject.asks[ask] < param.minDepthValue) {
-    //   delete candleObject.asks[ask];
-    // }
   });
-  candleObject.asks = Object.assign({}, asks);
+  candleObject.asks = Object.keys(asks).sort(function (a, b) {
+    if (+a <= +b) {
+      return -1;
+    } else {
+      return 1;
+    }
+  });
 }
 
 async function processDepthData(depth) {
