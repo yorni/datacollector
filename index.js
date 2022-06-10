@@ -175,6 +175,7 @@ function removeSmallLevels(candleObject) {
         return obj;
       }, {})
   );
+  console.log(candleObject.asks);
 }
 
 async function processDepthData(depth) {
