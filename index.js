@@ -133,18 +133,21 @@ function removeSmallLevels(candleObject) {
     }
   });
 
-  candleObject.bids = Object.keys(bids)
-    .sort(function (a, b) {
-      if (+a <= +b) {
-        return 1;
-      } else {
-        return -1;
-      }
-    })
-    .reduce((obj, key) => {
-      obj[key] = bids[key];
-      return obj;
-    }, {});
+  candleObject.bids = Object.assign(
+    {},
+    Object.keys(bids)
+      .sort(function (a, b) {
+        if (+a <= +b) {
+          return 1;
+        } else {
+          return -1;
+        }
+      })
+      .reduce((obj, key) => {
+        obj[key] = bids[key];
+        return obj;
+      }, {})
+  );
 
   Object.keys(candleObject.asks).forEach((ask) => {
     numAsk = Number(ask);
@@ -157,18 +160,21 @@ function removeSmallLevels(candleObject) {
       asks[String(numAsk)] = candleObject.asks[ask];
     }
   });
-  candleObject.asks = Object.keys(asks)
-    .sort(function (a, b) {
-      if (+a <= +b) {
-        return -1;
-      } else {
-        return 1;
-      }
-    })
-    .reduce((obj, key) => {
-      obj[key] = asks[key];
-      return obj;
-    }, {});
+  candleObject.asks = Object.assign(
+    {},
+    Object.keys(asks)
+      .sort(function (a, b) {
+        if (+a <= +b) {
+          return -1;
+        } else {
+          return 1;
+        }
+      })
+      .reduce((obj, key) => {
+        obj[key] = asks[key];
+        return obj;
+      }, {})
+  );
 }
 
 async function processDepthData(depth) {
