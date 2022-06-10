@@ -108,9 +108,9 @@ async function saveCandle(candle) {
   candleObject.asks = Object.assign({}, candle.asks);
 
   removeSmallLevels(candleObject);
-  console.log(candleObject);
+  //console.log(candleObject);
   try {
-    //const newcandleObject = await candleObject.save();
+    const newcandleObject = await candleObject.save();
     //console.log(newcandleObject);
   } catch (err) {
     console.log("!!!!!!!!!!!!!!", err.message);
