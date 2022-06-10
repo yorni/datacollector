@@ -10,6 +10,7 @@ param = {
   logData: false,
   binance: {},
   minDepthValue: 1,
+  levelLength: 3,
   candle: {},
   newCandle: {
     o: 0,

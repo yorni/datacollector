@@ -26,6 +26,9 @@ function initParameters() {
   if (process.env["MINDEPTH"]) {
     param.minDepthValue = process.env["MINDEPTH"];
   }
+  if (process.env["LENGTH"]) {
+    param.levelLength = Number(process.env["LENGTH"]);
+  }
 
   if (process.env["TICKER"]) {
     param.symbol = process.env["TICKER"];
@@ -95,8 +98,8 @@ async function saveCandle(candle) {
   candleObject.h = candle.h;
   candleObject.l = candle.l;
   candleObject.c = candle.c;
-  candleObject.lastAsk = Number(Object.keys(param.fullDepth.asks)[0]);
-  candleObject.lastBid = Number(Object.keys(param.fullDepth.bids)[0]);
+  //  candleObject.lastAsk = Number(Object.keys(param.fullDepth.asks)[0]);
+  //  candleObject.lastBid = Number(Object.keys(param.fullDepth.bids)[0]);
   candleObject.v = candle.v;
   candleObject.mv = candle.mv;
   candleObject.q = candle.q;
@@ -105,8 +108,9 @@ async function saveCandle(candle) {
   candleObject.asks = Object.assign({}, candle.asks);
 
   removeSmallLevels(candleObject);
+  console.log(candleObject);
   try {
-    const newcandleObject = await candleObject.save();
+    //const newcandleObject = await candleObject.save();
     //console.log(newcandleObject);
   } catch (err) {
     console.log("!!!!!!!!!!!!!!", err.message);
@@ -114,16 +118,39 @@ async function saveCandle(candle) {
 }
 
 function removeSmallLevels(candleObject) {
+  bids = {};
+  asks = {};
   Object.keys(candleObject.bids).forEach((bid) => {
-    if (candleObject.bids[bid] < param.minDepthValue) {
-      delete candleObject.bids[bid];
+    numBid = Number(bid);
+    numBid =
+      Math.floor(numBid * Math.pow(10, param.levelLength)) /
+      Math.pow(10, param.levelLength);
+
+    if (String(numBid) in bids) {
+      bids[String(numBid)] += candleObject.bids[bid];
+    } else {
+      bids[String(numBid)] = candleObject.bids[bid];
     }
+    // if (candleObject.bids[bid] < param.minDepthValue) {
+    //   delete candleObject.bids[bid];
+    // }
   });
+  candleObject.bids = Object.assign({}, bids);
   Object.keys(candleObject.asks).forEach((ask) => {
-    if (candleObject.asks[ask] < param.minDepthValue) {
-      delete candleObject.asks[ask];
+    numAsk = Number(ask);
+    numAsk =
+      Math.floor(numAsk * Math.pow(10, param.levelLength)) /
+      Math.pow(10, param.levelLength);
+    if (String(numAsk) in asks) {
+      asks[String(numAsk)] += candleObject.asks[ask];
+    } else {
+      asks[String(numAsk)] = candleObject.asks[ask];
     }
+    // if (candleObject.asks[ask] < param.minDepthValue) {
+    //   delete candleObject.asks[ask];
+    // }
   });
+  candleObject.asks = Object.assign({}, asks);
 }
 
 async function processDepthData(depth) {
