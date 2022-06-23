@@ -87,11 +87,11 @@ function startSubscription() {
         data.s +
         '" b=' +
         data.b +
-        ", bv=" +
+        ",bv=" +
         data.B +
-        ", a=" +
+        ",a=" +
         data.a +
-        ", av=" +
+        ",av=" +
         data.A +
         " " +
         data.E;
