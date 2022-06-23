@@ -95,7 +95,7 @@ function startSubscription() {
         data.A +
         " " +
         data.E;
-      console.log(resData);
+      //console.log(resData);
       if (!client.destroyed) {
         client.write(resData + "\n", (err) => {
           if (err) {
