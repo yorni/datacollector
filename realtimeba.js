@@ -75,14 +75,18 @@ function startSubscription() {
       //     T: 1655996285492,
       //     E: 1655996285501
       //   }
+      //   CREATE TABLE bookTicker(symb SYMBOL, b DOUBLE, bv DOUBLE, a DOUBLE, A DOUBLE, ts TIMESTAMP) timestamp(ts);
       let resData =
-        "bookTicker, b=" +
+        "bookTicker, " +
+        "symb=" +
+        data.s +
+        ", b=" +
         data.b +
-        ", B=" +
+        ", bv=" +
         data.B +
         ", a=" +
         data.a +
-        ", A=" +
+        ", av=" +
         data.A +
         " " +
         data.E;
