@@ -64,8 +64,29 @@ function startSubscription() {
   //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
     if (data.e == "bookTicker") {
-      console.log(data);
-
+      //   {
+      //     e: 'bookTicker',
+      //     u: 1646689643715,
+      //     s: 'GMTUSDT',
+      //     b: '0.77080',
+      //     B: '15584',
+      //     a: '0.77090',
+      //     A: '2000',
+      //     T: 1655996285492,
+      //     E: 1655996285501
+      //   }
+      res =
+        "bookTicker, b=" +
+        data.b +
+        ", B=" +
+        data.B +
+        ", a=" +
+        data.a +
+        ", A=" +
+        data.A +
+        " " +
+        data.E;
+      console.log(res);
       //    () => {
       //     const rows = [
       //       `trades,name=test_ilp1 value=12.4 ${Date.now() * 1e6}`,
