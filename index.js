@@ -72,11 +72,11 @@ function checkBinanceWebSocketsState() {
 }
 function startSubscription() {
   let subscribeArray = [];
-  if (param.collectedData == "trades") {
-    subscribeArray.push(param.symbol.toLowerCase() + "@aggTrade");
-  } else {
-    subscribeArray.push(param.symbol.toLowerCase() + "@depth@100ms");
-  }
+  //if (param.collectedData == "trades") {
+  subscribeArray.push(param.symbol.toLowerCase() + "@aggTrade");
+  // } else {
+  subscribeArray.push(param.symbol.toLowerCase() + "@depth@100ms");
+  //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
     if (data.e == "depthUpdate") {
       processDepthData(data);
