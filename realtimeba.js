@@ -83,9 +83,9 @@ function startSubscription() {
       //   CREATE TABLE bookTicker(symb SYMBOL, b DOUBLE, bv DOUBLE, a DOUBLE, A DOUBLE, ts TIMESTAMP) timestamp(ts);
       let resData =
         "bookTicker, " +
-        "symb='" +
+        "symb=""" +
         data.s +
-        "', b=" +
+        """, b=" +
         data.b +
         ", bv=" +
         data.B +
