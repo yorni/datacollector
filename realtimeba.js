@@ -85,7 +85,7 @@ function startSubscription() {
         "bookTicker," +
         'symb="' +
         data.s +
-        '", b=' +
+        '" b=' +
         data.b +
         ", bv=" +
         data.B +
