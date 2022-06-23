@@ -75,7 +75,7 @@ function startSubscription() {
       //     T: 1655996285492,
       //     E: 1655996285501
       //   }
-      res =
+      let resData =
         "bookTicker, b=" +
         data.b +
         ", B=" +
@@ -86,7 +86,7 @@ function startSubscription() {
         data.A +
         " " +
         data.E;
-      console.log(res);
+      console.log(resData);
       //    () => {
       //     const rows = [
       //       `trades,name=test_ilp1 value=12.4 ${Date.now() * 1e6}`,
