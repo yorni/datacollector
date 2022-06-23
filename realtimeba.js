@@ -87,12 +87,14 @@ function startSubscription() {
         " " +
         data.E;
       //console.log(resData);
-      client.write(resData + "\n", (err) => {
-        if (err) {
-          console.error(err);
-          process.exit(1);
-        }
-      });
+      if (!client.destroyed) {
+        client.write(resData + "\n", (err) => {
+          if (err) {
+            console.error(err);
+            process.exit(1);
+          }
+        });
+      }
       //  () => {
       //   const rows = [
       //     `trades,name=test_ilp1 value=12.4 ${Date.now() * 1e6}`,
