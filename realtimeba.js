@@ -94,7 +94,7 @@ function startSubscription() {
         ",av=" +
         data.A +
         " " +
-        data.E;
+        data.E * 1e6;
       //console.log(resData);
       if (!client.destroyed) {
         client.write(resData + "\n", (err) => {
