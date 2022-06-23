@@ -19,7 +19,12 @@ client.on("error", (err) => {
 });
 
 client.on("close", () => {
-  console.log("Connection closed");
+  console.log("Connection closed" + response);
+});
+
+var response = "";
+client.on("data", function (chunk) {
+  response += chunk;
 });
 
 function initParameters() {
