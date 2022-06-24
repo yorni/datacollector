@@ -70,8 +70,8 @@ function startSubscription() {
   //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
     if (prev_Book.E) {
-      let difAsk = Number(prev_Book.a) - Number(data.a) / Number(data.a);
-      let difBid = Number(prev_Book.b) - Number(data.b) / Number(data.b);
+      let difAsk = (Number(prev_Book.a) - Number(data.a)) / Number(data.a);
+      let difBid = (Number(prev_Book.b) - Number(data.b)) / Number(data.b);
       if (Math.abs(difAsk) > 0.1 || Math.abs(difBid) > 0.1) {
         console.log(prev_Book, data, difAsk, difBid);
       }
