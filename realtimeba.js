@@ -8,6 +8,7 @@ const HOST = "localhost";
 const PORT = 9009;
 let { param } = require("./param");
 const Binance = require("node-binance-api");
+let prev_Book = {};
 
 require("dotenv").config();
 
@@ -68,6 +69,13 @@ function startSubscription() {
   subscribeArray.push(param.symbol.toLowerCase() + "@bookTicker");
   //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
+    if (prev_Book.E) {
+      difAsk = Number(prev_Book.a) - Number(data.a) / Number(data.a);
+      difBid = Number(prev_Book.b) - Number(data.b) / Number(data.b);
+      if (Math.abs(difAsk) > 0.1 || Math.abs(difBid) > 0.1) {
+        console.log(prev_Book, data, difAsk, difBid);
+      }
+    }
     if (data.e == "bookTicker") {
       //   {
       //     e: 'bookTicker',
@@ -127,6 +135,7 @@ function startSubscription() {
 
       //   write(0);
       // }
+      prev_Book = Object.assign({}, data);
     }
   });
 }
