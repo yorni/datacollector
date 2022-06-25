@@ -67,10 +67,10 @@ function startSubscription() {
   let subscribeArray = [];
 
   subscribeArray.push(param.symbol.toLowerCase() + "@trade");
-  //subscribeArray.push(param.symbol.toLowerCase() + "@bookTicker");
+  subscribeArray.push(param.symbol.toLowerCase() + "@bookTicker");
   //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
-    if (data.e == "bookTicker") {
+    if (data.e == "trade") {
       // {
       //   e: 'trade',
       //   E: 1656186618377,
