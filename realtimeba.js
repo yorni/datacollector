@@ -66,7 +66,7 @@ function checkBinanceWebSocketsState() {
 function startSubscription() {
   let subscribeArray = [];
 
-  subscribeArray.push(param.symbol.toLowerCase() + "@trade");
+  //subscribeArray.push(param.symbol.toLowerCase() + "@trade");
   subscribeArray.push(param.symbol.toLowerCase() + "@bookTicker");
   //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
