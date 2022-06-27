@@ -8,6 +8,7 @@ const HOST = "localhost";
 const PORT = 9009;
 let { param } = require("./param");
 const Binance = require("node-binance-api");
+const { log } = require("console");
 let prev_Book = {};
 
 require("dotenv").config();
@@ -66,7 +67,7 @@ function checkBinanceWebSocketsState() {
 function startSubscription() {
   let subscribeArray = [];
 
-  //subscribeArray.push(param.symbol.toLowerCase() + "@trade");
+  subscribeArray.push(param.symbol.toLowerCase() + "@trade");
   subscribeArray.push(param.symbol.toLowerCase() + "@bookTicker");
   //}
   param.binance.futuresSubscribe(subscribeArray, (data) => {
@@ -101,6 +102,7 @@ function startSubscription() {
         data.m +
         " " +
         data.E * 1e6;
+      console.log(resData);
       if (!client.destroyed) {
         client.write(resData + "\n", (err) => {
           if (err) {
