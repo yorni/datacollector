@@ -52,6 +52,22 @@ const candleSchema = new Schema({
     type: Number,
     required: true,
   },
+  bid1: {
+    type: Number,
+    required: true,
+  },
+  bid05: {
+    type: Number,
+    required: true,
+  },
+  ask1: {
+    type: Number,
+    required: true,
+  },
+  ask05: {
+    type: Number,
+    required: true,
+  },
 
   bids: {
     type: Schema.Types.Mixed,

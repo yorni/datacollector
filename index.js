@@ -121,9 +121,24 @@ async function saveCandle(candle) {
 }
 
 function removeSmallLevels(candleObject) {
+  askVolumes1 = [];
+  bidVolumes1 = [];
+  askVolumes05 = [];
+  bidVolumes05 = [];
+  maxAsk05 = candleObject.lastAsk * 1.005;
+  maxBid05 = candleObject.lastBid * 0.995;
+  maxAsk1 = candleObject.lastAsk * 1.01;
+  maxBid1 = candleObject.lastBid * 0.99;
   bids = {};
   asks = {};
   Object.keys(candleObject.bids).forEach((bid) => {
+    if (Number(bid) >= maxBid1) {
+      bidVolumes1.push(Number(candleObject.bids[bid]));
+    }
+    if (Number(bid) >= maxBid05) {
+      bidVolumes05.push(Number(candleObject.bids[bid]));
+    }
+
     numBid = Number(bid);
     numBid =
       Math.floor(numBid * Math.pow(10, param.levelLength)) /
@@ -153,6 +168,12 @@ function removeSmallLevels(candleObject) {
   );
 
   Object.keys(candleObject.asks).forEach((ask) => {
+    if (Number(ask) >= maxAsk1) {
+      askVolumes1.push(Number(candleObject.asks[ask]));
+    }
+    if (Number(ask) >= maxAsk05) {
+      askVolumes05.push(Number(candleObject.asks[ask]));
+    }
     numAsk = Number(ask);
     numAsk =
       Math.floor(numAsk * Math.pow(10, param.levelLength)) /
@@ -179,6 +200,29 @@ function removeSmallLevels(candleObject) {
         return obj;
       }, {})
   );
+
+  askVolumes1.sort(function (a, b) {
+    return a - b;
+  });
+  bidVolumes1.sort(function (a, b) {
+    return a - b;
+  });
+  askVolumes05.sort(function (a, b) {
+    return a - b;
+  });
+  bidVolumes05.sort(function (a, b) {
+    return a - b;
+  });
+
+  candleObject.bid1 = bidVolumes1.splice(0, -2).reduce((acc, cur) => acc + cur);
+  candleObject.bid05 = bidVolumes05
+    .splice(0, -2)
+    .reduce((acc, cur) => acc + cur);
+  candleObject.ask1 = askVolumes1.splice(0, -2).reduce((acc, cur) => acc + cur);
+  candleObject.ask05 = askVolumes05
+    .splice(0, -2)
+    .reduce((acc, cur) => acc + cur);
+  console.log(candleObject);
 }
 
 async function processDepthData(depth) {
