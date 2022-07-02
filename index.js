@@ -214,11 +214,11 @@ function removeSmallLevels(candleObject) {
     return a - b;
   });
 
-  bidVolumes1 = bidVolumes1.splice(0, -2);
+  bidVolumes1 = bidVolumes1.slice(0, -2);
   console.log(bidVolumes1);
-  bidVolumes05 = bidVolumes05.splice(0, -2);
-  askVolumes1 = askVolumes1.splice(0, -2);
-  askVolumes05 = askVolumes05.splice(0, -2);
+  bidVolumes05 = bidVolumes05.slice(0, -2);
+  askVolumes1 = askVolumes1.slice(0, -2);
+  askVolumes05 = askVolumes05.slice(0, -2);
 
   candleObject.bid1 = bidVolumes1.reduce((acc, cur) => acc + cur);
   candleObject.bid05 = bidVolumes05.reduce((acc, cur) => acc + cur);
