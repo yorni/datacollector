@@ -204,11 +204,9 @@ function removeSmallLevels(candleObject) {
   askVolumes1.sort(function (a, b) {
     return a - b;
   });
-  console.log(bidVolumes1);
   bidVolumes1.sort(function (a, b) {
     return a - b;
   });
-  console.log(bidVolumes1);
   askVolumes05.sort(function (a, b) {
     return a - b;
   });
@@ -217,6 +215,7 @@ function removeSmallLevels(candleObject) {
   });
 
   bidVolumes1 = bidVolumes1.splice(0, -2);
+  console.log(bidVolumes1);
   bidVolumes05 = bidVolumes05.splice(0, -2);
   askVolumes1 = askVolumes1.splice(0, -2);
   askVolumes05 = askVolumes05.splice(0, -2);
