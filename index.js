@@ -215,16 +215,14 @@ function removeSmallLevels(candleObject) {
   });
 
   bidVolumes1 = bidVolumes1.slice(0, -2);
-  console.log(bidVolumes1);
-  bidVolumes05 = bidVolumes05.slice(0, -2);
+  bidVolumes05 = bidVolumes05.slice(0, -1);
   askVolumes1 = askVolumes1.slice(0, -2);
-  askVolumes05 = askVolumes05.slice(0, -2);
+  askVolumes05 = askVolumes05.slice(0, -1);
 
   candleObject.bid1 = bidVolumes1.reduce((acc, cur) => acc + cur);
   candleObject.bid05 = bidVolumes05.reduce((acc, cur) => acc + cur);
   candleObject.ask1 = askVolumes1.reduce((acc, cur) => acc + cur);
   candleObject.ask05 = askVolumes05.reduce((acc, cur) => acc + cur);
-  console.log(candleObject);
 }
 
 async function processDepthData(depth) {
