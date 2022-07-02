@@ -132,9 +132,9 @@ function removeSmallLevels(candleObject) {
   bids = {};
   asks = {};
   Object.keys(candleObject.bids).forEach((bid) => {
-    console.log(maxBid1, Number(bid));
     if (Number(bid) >= maxBid1) {
       bidVolumes1.push(Number(candleObject.bids[bid]));
+      console.log(maxBid1, Number(bid));
     }
     if (Number(bid) >= maxBid05) {
       bidVolumes05.push(Number(candleObject.bids[bid]));
