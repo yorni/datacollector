@@ -168,10 +168,10 @@ function removeSmallLevels(candleObject) {
   );
 
   Object.keys(candleObject.asks).forEach((ask) => {
-    if (Number(ask) >= maxAsk1) {
+    if (Number(ask) <= maxAsk1) {
       askVolumes1.push(Number(candleObject.asks[ask]));
     }
-    if (Number(ask) >= maxAsk05) {
+    if (Number(ask) <= maxAsk05) {
       askVolumes05.push(Number(candleObject.asks[ask]));
     }
     numAsk = Number(ask);
