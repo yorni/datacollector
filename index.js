@@ -150,7 +150,7 @@ function removeSmallLevels(candleObject) {
       bids[String(numBid)] = candleObject.bids[bid];
     }
   });
-  console.log(bidVolumes1);
+
   candleObject.bids = Object.assign(
     {},
     Object.keys(bids)
@@ -204,9 +204,11 @@ function removeSmallLevels(candleObject) {
   askVolumes1.sort(function (a, b) {
     return a - b;
   });
+  console.log(bidVolumes1);
   bidVolumes1.sort(function (a, b) {
     return a - b;
   });
+  console.log(bidVolumes1);
   askVolumes05.sort(function (a, b) {
     return a - b;
   });
@@ -219,7 +221,6 @@ function removeSmallLevels(candleObject) {
   askVolumes1 = askVolumes1.splice(0, -2);
   askVolumes05 = askVolumes05.splice(0, -2);
 
-  console.log(bidVolumes1);
   candleObject.bid1 = bidVolumes1.reduce((acc, cur) => acc + cur);
   candleObject.bid05 = bidVolumes05.reduce((acc, cur) => acc + cur);
   candleObject.ask1 = askVolumes1.reduce((acc, cur) => acc + cur);
